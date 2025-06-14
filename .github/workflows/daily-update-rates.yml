@@ -1,38 +1,33 @@
 name: Daily Exchange-Rate Import
 
 on:
-  workflow_dispatch:         # allows manual runs
-  schedule:                  # scheduled trigger
-    - cron: '0 17 * * *'     # 17:00 UTC = 18:00 CET daily
+  workflow_dispatch:
+  schedule:
+    - cron: '0 17 * * *'
 
 jobs:
   import:
     runs-on: ubuntu-latest
 
     steps:
-      # 1) Check out your repository code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2) Set up Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
-      # 3) Recreate the service account JSON from the encrypted secret
       - name: Write service account key
         run: |
-          cat <<EOF > sa.json
-${{ secrets.FIREBASE_SA_JSON }}
-EOF
+          cat << 'EOF' > sa.json
+          ${{ secrets.FIREBASE_SA_JSON }}
+          EOF
 
-      # 4) Install Python dependencies
       - name: Install dependencies
         run: |
           pip install firebase-admin requests
 
-      # 5) Run your updater script
       - name: Run updateRates.py
         run: |
           python updateRates.py sa.json
