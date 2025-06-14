@@ -1,0 +1,16 @@
+name: Daily Exchange-Rate Update
+
+on:
+  schedule:
+    # Runs at 17:00 UTC which is 18:00 CET (UTC+1)
+    - cron: '0 17 * * *'
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call updateRatesHttp
+        run: |
+          curl --silent -X POST "$UPDATE_RATES_URL"
+        env:
+          UPDATE_RATES_URL: ${{ secrets.UPDATE_RATES_URL }}
