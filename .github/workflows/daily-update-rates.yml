@@ -1,6 +1,11 @@
 name: Daily Exchange-Rate Import
 
 on:
+  workflow_dispatch:   # allows you to click “Run workflow” in the UI
+  schedule:
+    - cron: '0 17 * * *'
+
+on:
   schedule:
     # 17:00 UTC = 18:00 CET
     - cron: '0 17 * * *'
